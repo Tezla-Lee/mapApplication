@@ -1,4 +1,0 @@
-com/h_j/map/MapApplicationTests.java
- com.h_j.map.MapApplicationTests
-com/h_j/map/service/Directions5ServiceTest.java
- com.h_j.map.service.Directions5ServiceTest
