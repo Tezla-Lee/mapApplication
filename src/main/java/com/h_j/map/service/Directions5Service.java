@@ -1,7 +1,6 @@
 package com.h_j.map.service;
 
 import com.h_j.map.dto.LocationDto;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
@@ -14,15 +13,18 @@ import java.net.URL;
 @Service
 public class Directions5Service {
 
-    public void getDirections5(LocationDto departure, LocationDto destination) {
+    public JSONObject getDirections5(LocationDto departure, LocationDto destination) {
         String clientId = "9bdec1tgmw";  //clientId
         String clientSecret = "UOEzYHQGVrBh7PDty5kWKTrELIebbFwyWTEYYLRP";  //clientSecret
 
         try {
-            String api = "https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?start=" +
-                    departure.getLongitude() + "," + departure.getLatitude() +
-                    "&goal=" + destination.getLongitude() + "," + destination.getLatitude();
+//            String api = "https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?start=" +
+//                    departure.getLongitude() + "," + departure.getLatitude() +
+//                    "&goal=" + destination.getLongitude() + "," + destination.getLatitude();
+
+            String api = "https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?start=127.1058342,37.359708&goal=129.075986,35.179470";
             StringBuffer sb = new StringBuffer();
+
             URL url = new URL(api);
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestProperty("Content-Type", "application/json");
@@ -35,27 +37,14 @@ public class Directions5Service {
             BufferedReader br = new BufferedReader(in);
             String line;
             while ((line = br.readLine()) != null) {
+                System.out.println(line);
                 sb.append(line).append("\n");
             }
 
             JSONParser parser = new JSONParser();
-            JSONObject jsonObject;
-            JSONObject jsonObject2;
-            JSONArray jsonArray;
-            String x = "";
-            String y = "";
+            JSONObject jsonObject = null;
 
             jsonObject = (JSONObject) parser.parse(sb.toString());
-//            jsonArray = (JSONArray) jsonObject.get("addresses");
-//            for (int i = 0; i < jsonArray.size(); i++) {
-//                jsonObject2 = (JSONObject) jsonArray.get(i);
-//                if (null != jsonObject2.get("x")) {
-//                    x = jsonObject2.get("x").toString();
-//                }
-//                if (null != jsonObject2.get("y")) {
-//                    y = jsonObject2.get("y").toString();
-//                }
-//            }
             br.close();
             in.close();
 
@@ -64,8 +53,12 @@ public class Directions5Service {
             System.out.println(">>> " + jsonObject.toString());
             System.out.println("--------------------");
 
+            return jsonObject;
         } catch (Exception e) {
             System.out.println(e);
         }
+
+        return null;
     }
+
 }
