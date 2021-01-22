@@ -14,14 +14,14 @@ public class LocationController {
     private GeocodeService geocodeService;
 
     @GetMapping("/pathfinder")
-    public String findPath(HttpServletRequest request, String arrival, String destination) {
-        Location start = new Location(arrival);
+    public String findPath(HttpServletRequest request, String departure, String destination) {
+        Location start = new Location(departure);
         Location end = new Location(destination);
 
         geocodeService.updateGeo(start);
         geocodeService.updateGeo(end);
 
-        request.setAttribute("arrival", start);
+        request.setAttribute("departure", start);
         request.setAttribute("destination", end);
 
         return "result";
