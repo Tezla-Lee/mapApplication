@@ -1,4 +1,4 @@
-package com.h_j.map;
+package com.h_j.map.Service;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -10,7 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
-public class maptest {
+public class GeocodeService {
 
     public static void main(String[] args) {
         String clientId = "9bdec1tgmw";  //clientId
