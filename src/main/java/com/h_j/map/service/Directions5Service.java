@@ -1,6 +1,7 @@
 package com.h_j.map.service;
 
 import com.h_j.map.dto.LocationDto;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.net.URL;
 @Service
 public class Directions5Service {
 
-    public JSONObject getDirections5(LocationDto departure, LocationDto destination) {
+    public String[] getDirections5(LocationDto departure, LocationDto destination) {
         String clientId = "9bdec1tgmw";  //clientId
         String clientSecret = "UOEzYHQGVrBh7PDty5kWKTrELIebbFwyWTEYYLRP";  //clientSecret
 
@@ -50,10 +51,26 @@ public class Directions5Service {
 
             http.disconnect();
 //            System.out.println("위도 : " + y + "경도 : " + x);
-            System.out.println(">>> " + jsonObject.toString());
-            System.out.println("--------------------");
 
-            return jsonObject;
+            JSONArray jsonArray = (JSONArray)jsonObject.get("summary");
+
+            String duration = null;
+            String distance = null;
+
+            for(int i = 0; i<jsonArray.size(); i++) {
+                JSONObject jsonObject2 = (JSONObject) jsonArray.get(i);
+                if(null != jsonObject2.get("duration")) {
+                    duration = jsonObject2.get("duration").toString();
+                }
+                if(null != jsonObject2.get("distance")) {
+                    distance = jsonObject2.get("distance").toString();
+                }
+            }
+
+            System.out.println(duration);
+            System.out.println(distance);
+
+            return new String[] {duration, distance};
         } catch (Exception e) {
             System.out.println(e);
         }

@@ -1,6 +1,6 @@
 package com.h_j.map.service;
 
-import com.h_j.map.model.Location;
+import com.h_j.map.dto.LocationDto;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,7 +15,7 @@ import java.net.URLEncoder;
 @Service
 public class GeocodeService {
 
-    public void updateGeo(Location location) {
+    public void updateGeo(LocationDto locationDto) {
         String clientId = "9bdec1tgmw";  //clientId
         String clientSecret = "UOEzYHQGVrBh7PDty5kWKTrELIebbFwyWTEYYLRP";  //clientSecret
 
@@ -63,8 +63,9 @@ public class GeocodeService {
 
             http.disconnect();
             System.out.println("위도 : " + y + "경도 : " + x);
-            location.setLongitude(x);
-            location.setLatitude(y);
+
+            locationDto.setLongitude(x);
+            locationDto.setLatitude(y);
 
         } catch (Exception e) {
             System.out.println(e);

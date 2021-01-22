@@ -1,8 +1,9 @@
 package com.h_j.map.controller;
 
-import com.h_j.map.model.Location;
+import com.h_j.map.dto.LocationDto;
+import com.h_j.map.service.Directions5Service;
 import com.h_j.map.service.GeocodeService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,37 +12,48 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@RequiredArgsConstructor
 public class LocationController {
-    private final GeocodeService geocodeService;
+    @Autowired
+    private GeocodeService geocodeService;
 
-    @PostMapping("/map/setGeo")
+    @Autowired
+    private Directions5Service directions5Service;
+
+    @PostMapping("/setGeo")
     public String setGeo(Model model, HttpServletRequest request) {
-        Location departure = new Location((String) request.getAttribute("departure"));
-        Location destination = new Location((String) request.getAttribute("destination"));
+        LocationDto departure = new LocationDto();
+        departure.setAddress((String) request.getAttribute("departure"));
+        LocationDto destination = new LocationDto();
+        destination.setAddress((String) request.getAttribute("destination"));
 
         geocodeService.updateGeo(departure);
         geocodeService.updateGeo(destination);
 
-        model.addAttribute("departure", departure);
-        model.addAttribute("destination", destination);
+        String[] result = directions5Service.getDirections5(departure, destination);
 
-        return "/map/findPath";
 
+        model.addAttribute("duration", result[0]);
+        model.addAttribute("distance", result[1]);
+
+        System.out.println(">>> setGeo");
+
+        return "findway";
     }
 
-    @GetMapping("/map/setGeo")
-    public String setGeo(Model model) {
-        String distance = (String) model.getAttribute("distance");
-        String duration = (String) model.getAttribute("duration");
+    @GetMapping("/setGeo")
+    public String setGeo(String start, String end) {
+        String distance = start;
+        String duration = end;
 
-        return "findpath";
+        System.out.println(distance);
+        System.out.println(duration);
+
+        return "findway";
     }
 
     @GetMapping("/homepage")
     public String home() {
-
-        return "findpath";
+        System.out.println("home");
+        return "findway";
     }
 }
-
