@@ -47,6 +47,8 @@ public class GeocodeService {
 
             jsonObject = (JSONObject) parser.parse(sb.toString());
             jsonArray = (JSONArray)jsonObject.get("addresses");
+
+
             for(int i = 0; i<jsonArray.size(); i++) {
                 jsonObject2 = (JSONObject) jsonArray.get(i);
                 if(null != jsonObject2.get("x")) {
