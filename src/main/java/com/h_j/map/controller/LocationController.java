@@ -40,7 +40,7 @@ public class LocationController {
         model.addAttribute("duration", result[0]);
         model.addAttribute("distance", result[1]);
 
-        return "findway";
+        return "getInfo";
     }
 
     @GetMapping("/result_coordinate")
@@ -56,11 +56,11 @@ public class LocationController {
 
         model.addAttribute("coordinate", locationDto);
 
-        return "findway";
+        return "getInfo";
     }
 
     @GetMapping("/findpath")
     public String home() {
-        return "findway";
+        return "getInfo";
     }
 }
