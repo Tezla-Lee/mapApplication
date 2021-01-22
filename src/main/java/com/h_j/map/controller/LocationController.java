@@ -7,53 +7,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class LocationController {
     @Autowired
     private GeocodeService geocodeService;
-
     @Autowired
     private Directions5Service directions5Service;
 
-    @PostMapping("/setGeo")
-    public String setGeo(Model model, HttpServletRequest request) {
-        LocationDto departure = new LocationDto();
-        departure.setAddress((String) request.getAttribute("departure"));
-        LocationDto destination = new LocationDto();
-        destination.setAddress((String) request.getAttribute("destination"));
+    @GetMapping("/result_path")
+    public String setGeo(String departure, String destination, Model model) {
+        LocationDto start = new LocationDto();
+        start.setAddress(departure);
+        LocationDto end = new LocationDto();
+        end.setAddress(destination);
 
-        geocodeService.updateGeo(departure);
-        geocodeService.updateGeo(destination);
+        geocodeService.updateGeo(start);
+        geocodeService.updateGeo(end);
 
-        String[] result = directions5Service.getDirections5(departure, destination);
+        if (start.getLongitude() == null || start.getLatitude() == null) {
+            return "redirect:/findpath";
+        }
 
+        String[] result = directions5Service.getDirections5(start, end);
 
+        if (result == null || result[0] == null || result[1] == null) {
+            return "redirect:/findpath";
+        }
+
+        model.addAttribute("departure", departure);
+        model.addAttribute("destination", destination);
         model.addAttribute("duration", result[0]);
         model.addAttribute("distance", result[1]);
 
-        System.out.println(">>> setGeo");
+        return "findway";
+    }
+
+    @GetMapping("/result_coordinate")
+    public String setGeo(String location, Model model) {
+        LocationDto locationDto = new LocationDto();
+        locationDto.setAddress(location);
+
+        geocodeService.updateGeo(locationDto);
+
+        if (locationDto.getLongitude() == null || locationDto.getLatitude() == null) {
+            return "redirect:/findpath";
+        }
+
+        model.addAttribute("coordinate", locationDto);
 
         return "findway";
     }
 
-    @GetMapping("/setGeo")
-    public String setGeo(String start, String end) {
-        String distance = start;
-        String duration = end;
-
-        System.out.println(distance);
-        System.out.println(duration);
-
-        return "findway";
-    }
-
-    @GetMapping("/homepage")
+    @GetMapping("/findpath")
     public String home() {
-        System.out.println("home");
         return "findway";
     }
 }

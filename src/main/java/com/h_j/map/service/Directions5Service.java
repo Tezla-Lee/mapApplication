@@ -19,11 +19,10 @@ public class Directions5Service {
         String clientSecret = "UOEzYHQGVrBh7PDty5kWKTrELIebbFwyWTEYYLRP";  //clientSecret
 
         try {
-//            String api = "https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?start=" +
-//                    departure.getLongitude() + "," + departure.getLatitude() +
-//                    "&goal=" + destination.getLongitude() + "," + destination.getLatitude();
+            String api = "https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?start=" +
+                    departure.getLongitude() + "," + departure.getLatitude() +
+                    "&goal=" + destination.getLongitude() + "," + destination.getLatitude();
 
-            String api = "https://naveropenapi.apigw.ntruss.com/map-direction/v1/driving?start=127.1058342,37.359708&goal=129.075986,35.179470";
             StringBuffer sb = new StringBuffer();
 
             URL url = new URL(api);
@@ -38,39 +37,46 @@ public class Directions5Service {
             BufferedReader br = new BufferedReader(in);
             String line;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
                 sb.append(line).append("\n");
             }
 
             JSONParser parser = new JSONParser();
-            JSONObject jsonObject = null;
 
-            jsonObject = (JSONObject) parser.parse(sb.toString());
             br.close();
             in.close();
 
             http.disconnect();
-//            System.out.println("위도 : " + y + "경도 : " + x);
 
-            JSONArray jsonArray = (JSONArray)jsonObject.get("summary");
+            String duration = "";
+            String distance = "";
 
-            String duration = null;
-            String distance = null;
+            JSONObject jsonObject = (JSONObject) parser.parse(sb.toString());
+            JSONObject jsonObject1 = (JSONObject) jsonObject.get("route");
 
-            for(int i = 0; i<jsonArray.size(); i++) {
-                JSONObject jsonObject2 = (JSONObject) jsonArray.get(i);
-                if(null != jsonObject2.get("duration")) {
-                    duration = jsonObject2.get("duration").toString();
-                }
-                if(null != jsonObject2.get("distance")) {
-                    distance = jsonObject2.get("distance").toString();
-                }
+            JSONArray jsonArray = (JSONArray) jsonObject1.get("traoptimal");
+
+            JSONObject jsonObject2 = (JSONObject) jsonArray.get(0);
+            JSONObject jsonObject3 = (JSONObject) jsonObject2.get("summary");
+
+            duration = jsonObject3.get("duration").toString();
+
+            if (duration == null) {
+                System.out.println("!!!");
+                return new String[]{"", ""};
             }
 
-            System.out.println(duration);
-            System.out.println(distance);
+            int time = Integer.parseInt(duration) / 1000; // 초
 
-            return new String[] {duration, distance};
+            if (time / 60 >= 60) {
+                time /= 3600;
+                duration = time + " 시간 " + time % 60 + " 분";
+            } else {
+                duration = time / 60 + " 분";
+            }
+
+            distance = Double.parseDouble(jsonObject3.get("distance").toString()) / 1000 + " km";
+
+            return new String[]{duration, distance};
         } catch (Exception e) {
             System.out.println(e);
         }

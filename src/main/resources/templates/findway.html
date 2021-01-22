@@ -1,22 +1,24 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>길찾기</title>
+    <title>좌표 검색 & 길찾기</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 <body>
-<form action="/setGeo" method="post">
-    <table width="100%" height=320 border="0" cellpadding="0"
+
+<form action="/result_coordinate" method="get">
+    <table width="100%" height=200 border="0" cellpadding="0"
            cellspacing="0">
         <tr>
-            <td height=40 colspan="10">&nbsp;</td>
-        </tr>
-        <tr>
-            <td height="40" colspan="10" align="center" class="tdcontent">
+            <td height="300" colspan="10" align="center" class="tdcontent">
         </tr>
         <tr>
             <td height="20" colspan="10" align="center" class="tdcontent">
-                출발지 : <input type="text" name="departure" size="15">&nbsp;&nbsp;
-                도착지 : <input type="text" name="destination" size="15">
+                <span th:if="${coordinate != null}">
+                    지역 : <input type="text" name="location" size="15" th:value="${coordinate.getAddress()}">
+                </span>
+                <span th:unless="${coordinate != null}">
+                    지역 : <input type="text" name="location" size="15">
+                </span>
             </td>
         </tr>
         <tr>
@@ -26,12 +28,57 @@
             <td height="40" colspan="10" align="center">
         </tr>
         <tr>
+            <td colspan="10">&nbsp;</td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellpadding="0"
+           cellspacing="0">
+        <tr>
+            <span th:if="${coordinate} != null">
             <td height="20" colspan="10" align="center" class="tdcontent">
-            <td th:text="'예상 거리 : ' + ${distance}"></td>
-            <td th:text="'예상 시간 : ' + ${duration}"></td>
+                <span th:text="'위도 : ' + ${coordinate.getLatitude()}"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span th:text="'경도 : ' + ${coordinate.getLongitude()}"/>
+                </td>
+            </span>
+        </tr>
+        <tr>
+            <td colspan="10">&nbsp;</td>
+        </tr>
+    </table>
+</form>
+
+<form action="/result_path" method="get">
+    <table width="100%" height=60 border="0" cellpadding="0"
+           cellspacing="0">
+        <tr>
+            <td height="50" colspan="10" align="center" class="tdcontent">
+        </tr>
+        <tr>
+            <td height="20" colspan="10" align="center" class="tdcontent">
+                출발지 : <input type="text" name="departure" size="15" th:value="${departure}">&nbsp;&nbsp;
+                도착지 : <input type="text" name="destination" size="15" th:value="${destination}">
             </td>
         </tr>
-
+        <tr>
+            <td height="40" colspan="10" align="center">
+                <input type="submit" value="확인">
+            </td>
+            <td height="40" colspan="10" align="center">
+        </tr>
+        <tr>
+            <td colspan="10">&nbsp;</td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellpadding="0"
+           cellspacing="0">
+        <tr>
+            <span th:if="${distance} != null">
+            <td height="20" colspan="10" align="center" class="tdcontent">
+                <span th:text="'예상 거리 : ' + ${distance}"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span th:text="'예상 시간 : ' + ${duration}"/>
+                </td>
+            </span>
+        </tr>
         <tr>
             <td colspan="10">&nbsp;</td>
         </tr>

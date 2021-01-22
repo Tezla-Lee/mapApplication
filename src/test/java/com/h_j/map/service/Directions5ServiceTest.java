@@ -2,18 +2,19 @@ package com.h_j.map.service;
 
 import com.h_j.map.dto.LocationDto;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-@ExtendWith(MockitoExtension.class)
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest
 class Directions5ServiceTest {
 
-    @Mock
+    @Autowired
     private Directions5Service directions5Service;
 
     @Test
-    public void getDirections5() {
+    void getDirections5() {
         // 출발
         LocationDto departure = new LocationDto();
         departure.setLongitude("127.1058342");
@@ -24,6 +25,8 @@ class Directions5ServiceTest {
         destination.setLongitude("129.075986");
         destination.setLatitude("35.179470");
 
-        directions5Service.getDirections5(departure, destination);
+        String[] result = directions5Service.getDirections5(departure, destination);
+
+        assertThat(result).isNotEqualTo(null);
     }
 }

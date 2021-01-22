@@ -20,10 +20,12 @@ public class GeocodeService {
         String clientSecret = "UOEzYHQGVrBh7PDty5kWKTrELIebbFwyWTEYYLRP";  //clientSecret
 
         try {
-           String addr = URLEncoder.encode("여수","utf-8");
-           String api = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=" + addr;
-           StringBuffer sb = new StringBuffer();
-           URL url = new URL(api);
+            String addr = URLEncoder.encode(locationDto.getAddress(), "utf-8");
+            String api = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=" + addr;
+
+            StringBuffer sb = new StringBuffer();
+            URL url = new URL(api);
+
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestProperty("Content-Type", "application/json");
             http.setRequestProperty("X-NCP-APIGW-API-KEY-ID", clientId);
@@ -31,10 +33,10 @@ public class GeocodeService {
             http.setRequestMethod("GET");
             http.connect();
 
-            InputStreamReader in = new InputStreamReader(http.getInputStream(),"utf-8");
+            InputStreamReader in = new InputStreamReader(http.getInputStream(), "utf-8");
             BufferedReader br = new BufferedReader(in);
             String line;
-            while((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 sb.append(line).append("\n");
             }
 
@@ -46,15 +48,14 @@ public class GeocodeService {
             String y = "";
 
             jsonObject = (JSONObject) parser.parse(sb.toString());
-            jsonArray = (JSONArray)jsonObject.get("addresses");
+            jsonArray = (JSONArray) jsonObject.get("addresses");
 
-
-            for(int i = 0; i<jsonArray.size(); i++) {
+            for (int i = 0; i < jsonArray.size(); i++) {
                 jsonObject2 = (JSONObject) jsonArray.get(i);
-                if(null != jsonObject2.get("x")) {
+                if (null != jsonObject2.get("x")) {
                     x = jsonObject2.get("x").toString();
                 }
-                if(null != jsonObject2.get("y")) {
+                if (null != jsonObject2.get("y")) {
                     y = jsonObject2.get("y").toString();
                 }
             }
@@ -62,7 +63,6 @@ public class GeocodeService {
             in.close();
 
             http.disconnect();
-            System.out.println("위도 : " + y + "경도 : " + x);
 
             locationDto.setLongitude(x);
             locationDto.setLatitude(y);
