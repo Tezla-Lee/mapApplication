@@ -1,4 +1,4 @@
-package com.h_j.map.Service;
+package com.h_j.map.service;
 
 import java.io.*;
 import java.net.HttpURLConnection;

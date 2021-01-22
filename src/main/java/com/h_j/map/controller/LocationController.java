@@ -21,8 +21,9 @@ public class LocationController {
         geocodeService.updateGeo(start);
         geocodeService.updateGeo(end);
 
-        request.setAttribute("arrival",start);
+        request.setAttribute("arrival", start);
         request.setAttribute("destination", end);
+
         return "result";
     }
 }

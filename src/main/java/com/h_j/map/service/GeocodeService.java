@@ -1,8 +1,10 @@
-package com.h_j.map.Service;
+package com.h_j.map.service;
 
+import com.h_j.map.model.Location;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -10,9 +12,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+@Service
 public class GeocodeService {
 
-    public static void main(String[] args) {
+    public void updateGeo(Location location) {
         String clientId = "9bdec1tgmw";  //clientId
         String clientSecret = "UOEzYHQGVrBh7PDty5kWKTrELIebbFwyWTEYYLRP";  //clientSecret
 
@@ -58,6 +61,8 @@ public class GeocodeService {
 
             http.disconnect();
             System.out.println("위도 : " + y + "경도 : " + x);
+            location.setLongitude(x);
+            location.setLatitude(y);
 
         } catch (Exception e) {
             System.out.println(e);
