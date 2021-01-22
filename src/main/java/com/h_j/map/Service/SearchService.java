@@ -1,4 +1,4 @@
-package com.h_j.map;
+package com.h_j.map.Service;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-public class test {
+public class SearchService {
     public static void main(String[] args) {
         String clientId = "xkLFqnjXjAaA45jEAZ6R"; //애플리케이션 클라이언트 아이디값"
         String clientSecret = "097g8c7kbP"; //애플리케이션 클라이언트 시크릿값"

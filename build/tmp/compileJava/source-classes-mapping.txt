@@ -1,10 +1,10 @@
-com/h_j/map/test.java
- com.h_j.map.test
+com/h_j/map/model/direction5.java
+ com.h_j.map.model.direction5
 com/h_j/map/dto/direction5_dto.java
  com.h_j.map.dto.direction5_dto
 com/h_j/map/MapApplication.java
  com.h_j.map.MapApplication
-com/h_j/map/model/direction5.java
- com.h_j.map.model.direction5
-com/h_j/map/maptest.java
- com.h_j.map.maptest
+com/h_j/map/service/test.java
+ com.h_j.map.service.test
+com/h_j/map/service/maptest.java
+ com.h_j.map.service.maptest
